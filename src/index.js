@@ -1,1 +1,1 @@
-console.log("Server has been started")
+console.log('Server has been started')
