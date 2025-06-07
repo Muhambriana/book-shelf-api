@@ -1,0 +1,24 @@
+{
+  "name": "book-shelf-api",
+  "version": "0.0.1",
+  "description": "final-submission Belajar Back-End Pemula dengan JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js"
+  },
+  "author": "muham",
+  "license": "ISC",
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "eslint": "^9.28.0",
+    "globals": "^16.2.0",
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^21.4.0",
+    "nanoid": "^3.3.11"
+  }
+}
