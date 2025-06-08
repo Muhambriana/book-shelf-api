@@ -24,6 +24,14 @@ class Book {
     this.insertedAt = new Date().toISOString();
     this.updatedAt = this.insertedAt;
   }
+
+  toSummary() {
+    return {
+      id: this.id,
+      name: this.name,
+      publisher: this.publisher
+    }
+  }
 }
 
 export default Book;

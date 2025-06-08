@@ -37,8 +37,14 @@ const addBookHandler = (request, h) => {
 	 */
   books.push(newBook);
 
+  /**
+   * Recheck that item alredy on the list
+   */
   const isSuccess = books.filter((book) => book.id === newBook.id).length > 0;
 
+  /**
+   * If item not exist in the list
+   */
   if (!isSuccess) {
     return h.response(ApiResponse.fail('Gagal menambahkan buku')).code(500);
   }
@@ -46,6 +52,13 @@ const addBookHandler = (request, h) => {
   return h.response(ApiResponse.success('Buku berhasil ditambahkan', { bookId: newBook.id })).code(201);
 };
 
+const getAllBooksHandler = (request, h) => {
+  const bookList = books.map(book => book.toSummary());
+
+  return h.response(ApiResponse.success(null, { books: bookList }));
+};
+
 export {
   addBookHandler,
+  getAllBooksHandler
 };
