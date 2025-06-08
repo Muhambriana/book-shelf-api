@@ -9,8 +9,8 @@ const routes = [
   {
     method: 'GET',
     path: '/books',
-    handler: getAllBooksHandler
-  }
+    handler: getAllBooksHandler,
+  },
 ];
 
 export default routes;

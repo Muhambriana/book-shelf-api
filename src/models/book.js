@@ -29,8 +29,8 @@ class Book {
     return {
       id: this.id,
       name: this.name,
-      publisher: this.publisher
-    }
+      publisher: this.publisher,
+    };
   }
 }
 

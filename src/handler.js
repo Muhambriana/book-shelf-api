@@ -53,12 +53,12 @@ const addBookHandler = (request, h) => {
 };
 
 const getAllBooksHandler = (request, h) => {
-  const bookList = books.map(book => book.toSummary());
+  const bookList = books.map((book) => book.toSummary());
 
   return h.response(ApiResponse.success(null, { books: bookList }));
 };
 
 export {
   addBookHandler,
-  getAllBooksHandler
+  getAllBooksHandler,
 };
