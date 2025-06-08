@@ -30,7 +30,7 @@ const addBookHandler = (request, h) => {
   /**
    * Create new model
    */
-  const newBook = new Book({ name, ...rest });
+  const newBook = new Book({ name, pageCount, readPage, ...rest });
 
   /**
 	 * Add new book to list
@@ -62,6 +62,8 @@ const getBookByIdByHandler = (request, h) => {
   const { id } = request.params;
 
   const book = books.filter((b) => b.id === id)[0];
+
+  console.log(`kocak${book.pageCount}`);
 
   if (book === undefined) {
     return h.response(ApiResponse.fail('Buku tidak ditemukan')).code(404);
