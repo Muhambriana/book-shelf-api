@@ -55,10 +55,23 @@ const addBookHandler = (request, h) => {
 const getAllBooksHandler = (request, h) => {
   const bookList = books.map((book) => book.toSummary());
 
-  return h.response(ApiResponse.success(null, { books: bookList }));
+  return h.response(ApiResponse.success(null, { books: bookList })).code(200);
+};
+
+const getBookByIdByHandler = (request, h) => {
+  const { id } = request.params;
+
+  const book = books.filter((b) => b.id === id)[0];
+
+  if (book === undefined) {
+    return h.response(ApiResponse.fail('Buku tidak ditemukan')).code(404);
+  }
+
+  return h.response(ApiResponse.success(null, { book }));
 };
 
 export {
   addBookHandler,
   getAllBooksHandler,
+  getBookByIdByHandler,
 };
