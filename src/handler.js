@@ -65,20 +65,21 @@ const getAllBooksHandler = (request, h) => {
   let bookList = books;
 
   if (name !== undefined) {
-    bookList = bookList.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()))
+    bookList = bookList.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()));
   }
-  
+
   const isReading = getBooleanFromQueryParam(reading);
   if (isReading !== undefined) {
-    bookList = bookList.filter((book) => book.reading === isReading)
+    bookList = bookList.filter((book) => book.reading === isReading);
   }
 
-  const isFinished = getBooleanFromQueryParam(finished)
+  const isFinished = getBooleanFromQueryParam(finished);
   if (isFinished !== undefined) {
-    bookList = bookList.filter((book) => book.finished === isFinished)
+    bookList = bookList.filter((book) => book.finished === isFinished);
   }
 
-  return h.response(ApiResponse.success(null, { books: bookList.map((book) => book.toSummary())})).code(200);
+  const summarizedBooks = bookList.map((book) => book.toSummary());
+  return h.response(ApiResponse.success(null, { books: summarizedBooks })).code(200);
 };
 
 const getBookByIdByHandler = (request, h) => {
@@ -137,21 +138,21 @@ const editBookByIdHandler = (request, h) => {
 const deleteBookById = (request, h) => {
   const errorMessage = 'Buku gagal dihapus';
 
-  const { id } =  request.params;
+  const { id } = request.params;
   const index = books.findIndex((b) => b.id === id);
 
   if (index === -1) {
     return h.response(ApiResponse.fail(`${errorMessage}. Id tidak ditemukan`)).code(404);
   }
 
-  books.splice(index, 1)
-  return h.response(ApiResponse.success('Buku berhasil dihapus', null)).code(200)
-}
+  books.splice(index, 1);
+  return h.response(ApiResponse.success('Buku berhasil dihapus', null)).code(200);
+};
 
 export {
   addBookHandler,
   getAllBooksHandler,
   getBookByIdByHandler,
   editBookByIdHandler,
-  deleteBookById
+  deleteBookById,
 };
