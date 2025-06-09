@@ -57,7 +57,7 @@ class Book {
   }
 
   #isFinised() {
-    return this.pageCount === this.readPage
+    return this.pageCount === this.readPage;
   }
 }
 

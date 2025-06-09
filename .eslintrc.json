@@ -10,9 +10,9 @@
       {
         "js": "always"
       }
-    ],
-    "parserOptions": {
+    ]
+  },
+  "parserOptions": {
       "ecmaVersion": 13
-    }
   }
 }
