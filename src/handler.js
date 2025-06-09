@@ -69,8 +69,6 @@ const getBookByIdByHandler = (request, h) => {
 
   const book = books.filter((b) => b.id === id)[0];
 
-  console.log(`kocak${book.pageCount}`);
-
   if (book === undefined) {
     return h.response(ApiResponse.fail('Buku tidak ditemukan')).code(404);
   }
@@ -102,7 +100,7 @@ const editBookByIdHandler = (request, h) => {
   const index = books.findIndex((b) => b.id === id);
 
   if (index === -1) {
-    return h.response(ApiResponse.fail(`${errorMessage}. Id tidak ditemukan`));
+    return h.response(ApiResponse.fail(`${errorMessage}. Id tidak ditemukan`)).code(404);
   }
 
   const book = books[index];
@@ -119,9 +117,24 @@ const editBookByIdHandler = (request, h) => {
   return h.response(ApiResponse.success('Buku berhasil diperbarui', null)).code(200);
 };
 
+const deleteBookById = (request, h) => {
+  const errorMessage = 'Buku gagal dihapus';
+
+  const { id } =  request.params;
+  const index = books.findIndex((b) => b.id === id);
+
+  if (index === -1) {
+    return h.response(ApiResponse.fail(`${errorMessage}. Id tidak ditemukan`)).code(404);
+  }
+
+  books.splice(index, 1)
+  return h.response(ApiResponse.success('Buku berhasil dihapus', null)).code(200)
+}
+
 export {
   addBookHandler,
   getAllBooksHandler,
   getBookByIdByHandler,
   editBookByIdHandler,
+  deleteBookById
 };
