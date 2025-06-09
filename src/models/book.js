@@ -65,7 +65,7 @@ class Book {
   }
 
   /**
-   * Get the status of whether the fnished property is true or false.
+   * Get the status for the fnished property, whether is true or false.
    * @returns Boolean
    */
   #isFinised() {
