@@ -1,6 +1,7 @@
 import books from './books.js';
 import Book from './models/book.js';
 import ApiResponse from './utils/api_response.js';
+import { getBooleanFromQueryParam } from './utils/helper.js';
 
 /**
  * Handling for addding new book
@@ -59,9 +60,25 @@ const addBookHandler = (request, h) => {
 };
 
 const getAllBooksHandler = (request, h) => {
-  const bookList = books.map((book) => book.toSummary());
+  const { name, reading, finished } = request.query;
 
-  return h.response(ApiResponse.success(null, { books: bookList })).code(200);
+  let bookList = books;
+
+  if (name !== undefined) {
+    bookList = bookList.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()))
+  }
+  
+  const isReading = getBooleanFromQueryParam(reading);
+  if (isReading !== undefined) {
+    bookList = bookList.filter((book) => book.reading === isReading)
+  }
+
+  const isFinished = getBooleanFromQueryParam(finished)
+  if (isFinished !== undefined) {
+    bookList = bookList.filter((book) => book.finished === isFinished)
+  }
+
+  return h.response(ApiResponse.success(null, { books: bookList.map((book) => book.toSummary())})).code(200);
 };
 
 const getBookByIdByHandler = (request, h) => {
