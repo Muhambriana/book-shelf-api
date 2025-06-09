@@ -26,6 +26,10 @@ class Book {
     this.updatedAt = this.insertedAt;
   }
 
+  /**
+    * Get the selected objects for view only.
+    * @returns A list of books with selected property.
+    */
   toSummary() {
     return {
       id: this.id,
@@ -34,6 +38,10 @@ class Book {
     };
   }
 
+  /**
+   * Update several property
+   * @param {*} param0
+   */
   update({
     name,
     year,
@@ -56,6 +64,10 @@ class Book {
     this.updatedAt = getDateTimeNow();
   }
 
+  /**
+   * Get the status of whether the fnished property is true or false.
+   * @returns Boolean
+   */
   #isFinised() {
     return this.pageCount === this.readPage;
   }

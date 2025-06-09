@@ -1,3 +1,6 @@
+/**
+ * General Response Class (Reusable)
+ */
 class ApiResponse {
   constructor(status, message, data = null) {
     this.status = status;

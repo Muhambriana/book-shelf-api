@@ -19,7 +19,7 @@ const addBookHandler = (request, h) => {
   } = request.payload;
 
   /**
-   * Check if name property not included
+   * Check if the name property is missing.
    */
   if (!name) {
     return h.response(ApiResponse.fail(`${errorMessage}. Mohon isi nama buku`)).code(400);
@@ -59,29 +59,50 @@ const addBookHandler = (request, h) => {
   return h.response(ApiResponse.success('Buku berhasil ditambahkan', { bookId: newBook.id })).code(201);
 };
 
+/**
+ * Handling for get book list (whether with filter or not)
+ */
 const getAllBooksHandler = (request, h) => {
   const { name, reading, finished } = request.query;
 
+  /**
+   * Variable that will give as response (modif)
+   */
   let bookList = books;
 
+  /**
+   * If the NAME is defined, filter the book list using the parsed name.
+   */
   if (name !== undefined) {
     bookList = bookList.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()));
   }
 
+  /**
+   * If the READING is defined, filter the book list using the parsed reading.
+   */
   const isReading = getBooleanFromQueryParam(reading);
   if (isReading !== undefined) {
     bookList = bookList.filter((book) => book.reading === isReading);
   }
 
+  /**
+   * If the FINISHED is defined, filter the book list using the parsed finished.
+   */
   const isFinished = getBooleanFromQueryParam(finished);
   if (isFinished !== undefined) {
     bookList = bookList.filter((book) => book.finished === isFinished);
   }
 
+  /**
+   * Give response with selected property
+   */
   const summarizedBooks = bookList.map((book) => book.toSummary());
   return h.response(ApiResponse.success(null, { books: summarizedBooks })).code(200);
 };
 
+/**
+ * Handling for get selected book with id
+ */
 const getBookByIdByHandler = (request, h) => {
   const { id } = request.params;
 
@@ -94,6 +115,9 @@ const getBookByIdByHandler = (request, h) => {
   return h.response(ApiResponse.success(null, { book }));
 };
 
+/**
+ * Handling for update book with id
+ */
 const editBookByIdHandler = (request, h) => {
   const errorMessage = 'Gagal memperbarui buku';
   /**
@@ -106,10 +130,16 @@ const editBookByIdHandler = (request, h) => {
     ...rest
   } = request.payload;
 
+  /**
+   * Check if the name property is missing.
+   */
   if (!name) {
     return h.response(ApiResponse.fail(`${errorMessage}. Mohon isi nama buku`)).code(400);
   }
 
+  /**
+   * Check if readPage more than pageCount
+   */
   if (readPage > pageCount) {
     return h.response(ApiResponse.fail(`${errorMessage}. readPage tidak boleh lebih besar dari pageCount`)).code(400);
   }
@@ -117,6 +147,9 @@ const editBookByIdHandler = (request, h) => {
   const { id } = request.params;
   const index = books.findIndex((b) => b.id === id);
 
+  /**
+   * Check if id is not found in book list
+   */
   if (index === -1) {
     return h.response(ApiResponse.fail(`${errorMessage}. Id tidak ditemukan`)).code(404);
   }
@@ -135,16 +168,25 @@ const editBookByIdHandler = (request, h) => {
   return h.response(ApiResponse.success('Buku berhasil diperbarui', null)).code(200);
 };
 
+/**
+ * Handling for delete book with id
+ */
 const deleteBookById = (request, h) => {
   const errorMessage = 'Buku gagal dihapus';
 
   const { id } = request.params;
   const index = books.findIndex((b) => b.id === id);
 
+  /**
+   * Check if id is not found in book list
+   */
   if (index === -1) {
     return h.response(ApiResponse.fail(`${errorMessage}. Id tidak ditemukan`)).code(404);
   }
 
+  /**
+   * Delete selected book
+   */
   books.splice(index, 1);
   return h.response(ApiResponse.success('Buku berhasil dihapus', null)).code(200);
 };
