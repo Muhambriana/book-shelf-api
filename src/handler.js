@@ -1,8 +1,12 @@
 import books from './books.js';
 import Book from './models/book.js';
-import ApiResponse from './utils/apiresponse.js';
+import ApiResponse from './utils/api_response.js';
 
+/**
+ * Handling for addding new book
+ */
 const addBookHandler = (request, h) => {
+  const errorMessage = 'Gagal menambahkan buku';
   /**
 	 * Get request body property
 	 */
@@ -17,20 +21,22 @@ const addBookHandler = (request, h) => {
    * Check if name property not included
    */
   if (!name) {
-    return h.response(ApiResponse.fail('Gagal menambahkan buku. Mohon isi nama buku')).code(400);
+    return h.response(ApiResponse.fail(`${errorMessage}. Mohon isi nama buku`)).code(400);
   }
 
   /**
    * Check if readPage more than pageCount
    */
   if (readPage > pageCount) {
-    return h.response(ApiResponse.fail('Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount')).code(400);
+    return h.response(ApiResponse.fail(`${errorMessage}. readPage tidak boleh lebih besar dari pageCount`)).code(400);
   }
 
   /**
    * Create new model
    */
-  const newBook = new Book({ name, pageCount, readPage, ...rest });
+  const newBook = new Book({
+    name, pageCount, readPage, ...rest,
+  });
 
   /**
 	 * Add new book to list
@@ -46,7 +52,7 @@ const addBookHandler = (request, h) => {
    * If item not exist in the list
    */
   if (!isSuccess) {
-    return h.response(ApiResponse.fail('Gagal menambahkan buku')).code(500);
+    return h.response(ApiResponse.fail(errorMessage)).code(500);
   }
 
   return h.response(ApiResponse.success('Buku berhasil ditambahkan', { bookId: newBook.id })).code(201);
@@ -72,8 +78,50 @@ const getBookByIdByHandler = (request, h) => {
   return h.response(ApiResponse.success(null, { book }));
 };
 
+const editBookByIdHandler = (request, h) => {
+  const errorMessage = 'Gagal memperbarui buku';
+  /**
+	 * Get request body property
+	 */
+  const {
+    name,
+    pageCount,
+    readPage,
+    ...rest
+  } = request.payload;
+
+  if (!name) {
+    return h.response(ApiResponse.fail(`${errorMessage}. Mohon isi nama buku`)).code(400);
+  }
+
+  if (readPage > pageCount) {
+    return h.response(ApiResponse.fail(`${errorMessage}. readPage tidak boleh lebih besar dari pageCount`)).code(400);
+  }
+
+  const { id } = request.params;
+  const index = books.findIndex((b) => b.id === id);
+
+  if (index === -1) {
+    return h.response(ApiResponse.fail(`${errorMessage}. Id tidak ditemukan`));
+  }
+
+  const book = books[index];
+
+  book.update({
+    name,
+    pageCount,
+    readPage,
+    ...rest,
+  });
+
+  books[index] = book;
+
+  return h.response(ApiResponse.success('Buku berhasil diperbarui', null)).code(200);
+};
+
 export {
   addBookHandler,
   getAllBooksHandler,
   getBookByIdByHandler,
+  editBookByIdHandler,
 };
