@@ -1,13 +1,14 @@
 import Hapi from '@hapi/hapi';
-import routes from './routes/routes.js';
+import notesPlugins from './plugins/notes_plugins.js';
 
 const init = async () => {
-  const server = Hapi.server({
-    port: 9000,
-    host: 'localhost',
-  });
+  const server = Hapi.server();
 
-  server.route(routes);
+  // Register one plugin
+  await server.register({
+    plugin: notesPlugins,
+    options: { notes: [] },
+  });
 
   await server.start();
   console.log(`Server running on ${server.info.uri}`);
